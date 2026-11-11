@@ -18,3 +18,16 @@ let remove_duplicates lst =
                 head :: aux (head :: seen) tail
     in
     aux [] lst
+
+(* Problem 1.2(b) - Association Lists *)
+
+let rec lookup key env =
+    match env with
+    | [] -> None
+    | (k, v) :: rest ->
+        if k = key then
+            Some v
+        else
+            lookup key rest
+let extend key value env =
+    (key, value) :: env
