@@ -1,4 +1,4 @@
-Problem 1.1 
+Problem 1.1. Scoping Puzzles 
 (a)
     let x = 1 in
     let f = fun () -> x in
