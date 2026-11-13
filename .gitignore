@@ -1,0 +1,52 @@
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ===== OCaml =====
+*.cmi
+*.cmo
+*.cmx
+*.cmxa
+*.cmxs
+*.cma
+*.o
+*.a
+*.annot
+*.cmt
+*.cmti
+*.exe
+
+# OCaml build directories
+_build/
+_build*/
+_opam/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# ===== VS Code =====
+.vscode/
+
+# ===== Temporary Files =====
+*~
+*.swp
+*.swo
+*.tmp
+
+# ===== Environment and Secrets =====
+.env
+.env.*
+!.env.example
+
+# ===== Other =====
+Thumbs.db
+desktop.ini
