@@ -27,6 +27,7 @@ let rec check_scope ( env : string list ) ( e : expr ) : unit =
     check_scope env e1;
     check_scope env e2
   | If (cond, e1, e2) ->
+    check_scope env cond;
     check_scope env e1;
     check_scope env e2
   | Let (x, e1, e2 ) ->
@@ -54,6 +55,25 @@ let fresh_type_var () =
   incr type_counter;
   TVar name
 
+let rec contain_type_var name t =
+  match t with
+  | TInt | TBool -> false
+  | TVar x -> x = name
+  | TArrow (a,b) ->
+    contain_type_var name a || contain_type_var name b
+
+let rec fresh_type_var_avoid env =
+  let candid = fresh_type_var () in
+  match candid with
+  | TVar name ->
+    if List.exists
+      (fun (_,t) -> contain_type_var name t)
+      env
+    then fresh_type_var_avoid env
+    else candid
+  | _ -> candid
+
+
 let rec gen_equations ( env : typ env ) ( e : expr )
   : typ * ( typ * typ ) list =
   match e with
@@ -79,13 +99,13 @@ let rec gen_equations ( env : typ env ) ( e : expr )
     let (t2,c2) = gen_equations ((x, t1) :: env ) e2 in
     (t2, c1 @ c2)
   | Fun (x, body ) ->
-    let tx = fresh_type_var () in
+    let tx = fresh_type_var_avoid env in
     let (tb, cb ) = gen_equations ((x, tx) :: env) body in
     (TArrow (tx, tb), cb)
   | App (e1, e2 ) ->
     let ( tf, cf ) = gen_equations env e1 in
     let ( ta, ca ) = gen_equations env e2 in
-    let tr = fresh_type_var () in
+    let tr = fresh_type_var_avoid env in
     (tr, cf @ ca @ [(tf, TArrow (ta, tr))])
 
 
