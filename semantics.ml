@@ -87,3 +87,65 @@ let rec gen_equations ( env : typ env ) ( e : expr )
     let ( ta, ca ) = gen_equations env e2 in
     let tr = fresh_type_var () in
     (tr, cf @ ca @ [(tf, TArrow (ta, tr))])
+
+
+(* Problem 3.3 - Unification Algorithm *)
+
+let rec sub name replacement t =
+  match t with
+  | TInt -> TInt
+  | TBool -> TBool
+  | TVar x -> 
+    if x = name then replacement else t
+  | TArrow (t1, t2) ->
+    TArrow ( sub name replacement t1, sub name replacement t2)
+
+
+let rec occurs name t =
+  match t with
+  | TInt | TBool -> false
+  | TVar x -> x = name
+  | TArrow (t1, t2) ->
+    occurs name t1 || occurs name t2
+
+let unify (equations : (typ * typ) list )
+    : (string * typ ) list =
+
+    let rec solve equations subs = 
+      match equations with
+      | [] ->
+        subs
+      | (t1, t2 ) :: rest ->
+
+        if t1 = t2 then
+          solve rest subs
+        else
+          match (t1, t2) with
+          | (TVar x, t) | (t, TVar x) ->
+            if occurs x t then
+              raise (TypeError ("Occurs check failed: " ^ x))
+            else
+              let new_r =
+                List.map
+                (fun (a,b) -> 
+                  sub x t a, sub x t b)
+                rest
+              in
+              let new_sub = 
+                List.map
+                (fun (name, typ) -> 
+                  (name, sub x t typ ))
+                subs
+              in
+
+              solve new_r
+              ((x,t) :: new_sub)
+
+        | (TArrow (a1, b1 ), TArrow (a2, b2)) ->
+            solve ((a1, a2) :: (b1, b2) :: rest)
+            subs
+        | _ ->
+          raise (TypeError "Incompatible types")
+in
+solve equations []
+        
