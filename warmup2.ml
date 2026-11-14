@@ -1,5 +1,6 @@
 (* Problem 1.2. Recursive and Polymorphic Operations *)
 
+
 (* Problem 1.2(a) - Remove duplicates *)
 let rec contains item lst =
     match lst with

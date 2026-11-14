@@ -1,4 +1,4 @@
-(* Part 3 - MiniML Semantic Analyzer *)
+(* Part 3 - MiniML Semantic Analyzer ( OCaml ) *)
 
 (* AST from assignment *)
 type expr =
@@ -11,6 +11,7 @@ type expr =
   | Fun of string * expr
   | App of expr * expr
 
+(* Exceptions from assignment details *)
 exception UnboundVariable of string
 exception TypeError of string
 

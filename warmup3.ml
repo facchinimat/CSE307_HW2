@@ -1,6 +1,6 @@
-(* Problem 1.3. Closures and Higher-Order Functions in OCaml *)
+(* Problem 1.3. Closures and Higher Order Functions in OCaml *)
 
-(* Problem 1.3(a) - Counter *)
+(* Problem 1.3(a) *)
 
 let make_counter () =
   let count = ref 0 in
@@ -8,7 +8,7 @@ let make_counter () =
     count := !count + 1;
     !count
 
-(* Problem 1.3(b) - Function Composition *)
+(* Problem 1.3(b) *)
 let compose f g x =
   f (g x)
 
@@ -33,7 +33,7 @@ let add x y = x + y
 let () =
   assert (curry (uncurry add) 3 4 = add 3 4)
 
-(* Problem 1.3(d) - Apply Twice *)
+(* Problem 1.3(d) *)
 
 (* Most general type is ('a -> 'a) -> 'a -> 'a
 Since f is applied twice its output type must match its input type. Therefore, f must have type a -> a and apply twice returns a.
